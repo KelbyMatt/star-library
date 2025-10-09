@@ -35,13 +35,13 @@ class Book(dbBase):
     )
 
 
-    class Reader(dbBase):
-        __tablename__ = "readers"
+class Reader(dbBase):
+    __tablename__ = "readers"
 
-        id = Column(Integer, primary_key=True, index=True)
-        name = Column(String, index=True)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
 
-        read_books = relationship("Book",
-            secondary=book_loans_table,
-            back_populates="readers"
-        )
+    read_books = relationship("Book",
+        secondary=book_loans_table,
+        back_populates="readers"
+    )
