@@ -2,8 +2,9 @@ from fastapi import FastAPI, Depends, HTTPException
 from . import models, crud, schemas
 from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
-from typing import List
-
+from sqlalchemy import  desc, func
+from typing import List, Optional
+from collections import Counter
 
 models.dbBase.metadata.create_all(bind=engine)
 
@@ -55,3 +56,62 @@ def create_reader(reader: schemas.ReaderCreate, db: Session = Depends(get_db)):
 def read_readers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     readers = crud.list_readers(db, skip=skip, limit=limit)
     return readers
+
+
+@app.get("/books/popular", response_model=List[schemas.BookPublic])
+def get_popular_books(db: Session = Depends(get_db)):
+    popular_books = (
+        db.query(models.Book)
+        .join(models.book_loans_table)
+        .group_by(models.Book.id)
+        .order_by(desc(func.count(models.book_loans_table.c.reader_id)))
+        .all()
+    )
+    return popular_books
+
+def _get_user_top_authors(user: models.Reader,limit: int = 3) -> List[models.Author]:
+    if not user.read_books:
+        return []
+    
+    authors_books_read_count = Counter(book.author for book in user.read_books)
+    top_authors_with_counts = authors_books_read_count.most_common(limit)
+
+    top_authors = [author for author, count in top_authors_with_counts]
+    return top_authors
+
+
+@app.get("/dashboard/stats")
+def get_reader_dashboard(db: Session = Depends(get_db)):
+
+    SIGNED_IN_READER_ID = 1
+
+    most_popular_author_query = (
+        db.query(models.Author, func.count(models.book_loans_table.c.reader_id).label("read_count"))
+        .join(models.Book)
+        .join(models.book_loans_table)
+        .group_by(models.Author)
+        .order_by(desc("read_count"))
+        .first()
+    )
+    most_popular_author = most_popular_author_query[0] if most_popular_author_query else None
+
+    active_reader = crud.get_reader_by_id(db, reader_id=SIGNED_IN_READER_ID)
+    if not active_reader:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"The active reader (ID: {SIGNED_IN_READER_ID}) could not be found."
+        )
+
+    total_books_read = len(active_reader.read_books)
+    favorite_authors = _get_user_top_authors(active_reader, limit=3)
+
+    return {
+        "library_wide_stats": {
+            "most_popular_author": schemas.AuthorPublic.model_validate(most_popular_author) if most_popular_author else None,
+        },
+        "personal_stats": {
+            "user_profile": schemas.ReaderPublic.model_validate(active_reader),
+            "total_books_read": total_books_read,
+            "favorite_authors": [schemas.AuthorPublic.model_validate(author) for author in favorite_authors],
+        }
+    }
