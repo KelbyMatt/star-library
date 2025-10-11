@@ -1,0 +1,9 @@
+# Ignore the Python virtual environment folder
+venv/
+
+# Ignore Python's cache folder
+__pycache__/
+
+# Ignore our SQLite database file
+# Using a specific name is a great personal touch
+library.db.sqlite
