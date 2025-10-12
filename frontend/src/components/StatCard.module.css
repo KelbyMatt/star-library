@@ -1,0 +1,26 @@
+.card {
+  background-color: #1E293B; 
+  padding: 1rem;
+  border-radius: 0.5rem; 
+  border: 1px solid #334155;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #94A3B8; 
+  text-transform: uppercase;
+}
+
+.value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #FBBF24; 
+  margin-top: 0.25rem;
+}
+
+.subtext {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-top: 0.25rem;
+}

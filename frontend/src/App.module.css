@@ -1,0 +1,30 @@
+.header {
+  padding: 1rem;
+  border-bottom: 1px solid #475569;
+}
+.headerTitle {
+  font-size: 2.25rem;
+  font-weight: 800;
+  text-align: center;
+  color: #FBBF24; 
+}
+.mainContent {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .mainContent {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .dashboardColumn {
+    grid-column: span 1;
+  }
+  .bookListColumn {
+    grid-column: span 2;
+  }
+}

@@ -1,0 +1,41 @@
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #1E293B; 
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #475569;
+  transition: all 0.2s ease-in-out;
+}
+
+.listItem:hover {
+  border-color: #EF4444; 
+  background-color: #334155; 
+}
+
+.rank {
+  font-size: 1.125rem; 
+  font-weight: 700;
+  color: #94A3B8; 
+  flex-shrink: 0;
+}
+
+.bookInfo {
+  flex-grow: 1;
+  min-width: 0; 
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.author {
+  font-size: 0.875rem;
+  color: #94A3B8;
+}
