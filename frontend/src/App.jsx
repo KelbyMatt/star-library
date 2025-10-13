@@ -1,32 +1,60 @@
+import { useState, useEffect } from 'react';
 import styles from './App.module.css';
 import Dashboard from './components/Dashboard';
 import BookList from './components/BookList';
 
 function App() {
-  // --- Placeholder Data ---
-  const dashboardStats = {
-    library_wide_stats: {
-      most_popular_author: { id: 1, name: "Akira Toriyama" }
-    },
+  const [dashboardStats, setDashboardStats] = useState({
+    library_wide_stats: { most_popular_author: null },
     personal_stats: {
-      user_profile: { id: 1, name: "James Bernhardt" },
-      total_books_read: 9,
-      favorite_authors: [
-        { id: 1, name: "Akira Toriyama" },
-        { id: 3, name: "Yuji Kaku" },
-        { id: 2, name: "Masashi Kishimoto" }
-      ]
+      user_profile: { name: "..." },
+      total_books_read: 0,
+      favorite_authors: []
     }
-  };
+  });
 
-  const popularBooks = [
-    { id: 2, title: "Dragon Ball Z", author: { id: 1, name: "Akira Toriyama" } },
-    { id: 5, title: "Naruto", author: { id: 2, name: "Masashi Kishimoto" } },
-    { id: 1, title: "Dragon Ball", author: { id: 1, name: "Akira Toriyama" } },
-    { id: 13, title: "Black Clover", author: { id: 4, name: "Yuki Tabata" } },
-  ];
+  const [popularBooks, setPopularBooks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
- return (
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsResponse, booksResponse] = await Promise.all([
+          fetch('/api/dashboard/stats'),
+          fetch('/api/books/popular')
+        ]);
+        if (!statsResponse.ok || !booksResponse.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const statsData = await statsResponse.json();
+        const booksData = await booksResponse.json();
+
+        setDashboardStats(statsData);
+        setPopularBooks(booksData);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setError("Could not connect to the library. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  if (isLoading) {
+    return <div className={styles.centeredMessage}>Loading Library...</div>;
+  }
+
+  if (error) {
+    return <div className={styles.centeredMessageError}>{error}</div>;
+  }
+
+return (
     <div>
       <header className={styles.header}>
         <h1 className={styles.headerTitle}>STAR Library</h1>

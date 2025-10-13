@@ -54,29 +54,41 @@ def seed_data():
         print("Readers Created")
 
         all_books = db.query(models.Book).all()
-
+        dragon_ball_book = all_books[0]
         dragon_ball_z_book = all_books[1]
+        dragon_ball_super_book = all_books[2]
         toriyama_books = all_books[0:4]
         kishimoto_books = all_books[4:9]
         kaku_books = all_books[9:12]
         tabata_books = all_books[12:15]
 
 
-        reader2.read_books.append(dragon_ball_z_book)
-        reader3.read_books.append(dragon_ball_z_book)
-        reader4.read_books.append(dragon_ball_z_book)
-        reader5.read_books.append(dragon_ball_z_book)
+        james_books = set()
+        kelby_books = set()
+        thierry_books = set()
+        arsene_books = set()
+        john_books = set()
 
-        reader1.read_books.extend(toriyama_books)
-        reader1.read_books.extend(kaku_books)
-        reader1.read_books.append(all_books[4])
-        reader1.read_books.append(all_books[12])
-        
-        reader2.read_books.extend(kishimoto_books)
-        reader2.read_books.extend(all_books[12:14])
-        
-        reader3.read_books.append(all_books[0])
-        reader4.read_books.append(all_books[2])
+        thierry_books.add(dragon_ball_z_book)
+        arsene_books.add(dragon_ball_z_book)
+        john_books.add(dragon_ball_z_book)
+
+        james_books.update(toriyama_books)
+        james_books.update(kaku_books)
+        james_books.add(all_books[4]) 
+        james_books.add(all_books[12]) 
+
+        kelby_books.update(kishimoto_books)
+        kelby_books.update(all_books[12:14]) 
+
+        thierry_books.add(dragon_ball_book)
+        arsene_books.add(dragon_ball_super_book)
+
+        reader1.read_books = list(james_books)
+        reader2.read_books = list(kelby_books)
+        reader3.read_books = list(thierry_books)
+        reader4.read_books = list(arsene_books)
+        reader5.read_books = list(john_books)
 
         db.commit()
         print("Relationships Created")

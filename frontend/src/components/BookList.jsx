@@ -6,7 +6,7 @@ function BookList({ books }) {
     <section>
       <h2 className={styles.listHeader}>Most Popular Books</h2>
       <ul className={styles.bookList}>
-        {books.map((book, index) => (
+        {books?.map((book, index) => (
         
           <li key={book.id}>
             <BookCard book={book} rank={index + 1} />

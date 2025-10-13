@@ -12,6 +12,7 @@ class ReaderBase(BaseModel):
     name: str
 
 
+
 class BookCreate(BookBase):
     author_id: int
 
@@ -22,6 +23,7 @@ class ReaderCreate(ReaderBase):
     pass
 
 
+
 class BookInAuthor(BookBase):
     id: int
     model_config = ConfigDict(from_attributes=True)
@@ -29,6 +31,7 @@ class BookInAuthor(BookBase):
 class AuthorInBook(AuthorBase):
     id: int
     model_config = ConfigDict(from_attributes=True)
+
 
 
 class BookPublic(BookBase):
@@ -42,6 +45,6 @@ class AuthorPublic(AuthorBase):
     model_config = ConfigDict(from_attributes=True)
 
 class ReaderPublic(ReaderBase):
-  
+    id: int
     read_books: List[BookPublic] = []
     model_config = ConfigDict(from_attributes=True)

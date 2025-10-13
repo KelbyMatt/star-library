@@ -17,20 +17,20 @@ def get_db():
     finally:
         db.close()
 
-@app.get("/")
+@app.get("/api")
 def main_library_root():
     return {"message": "STAR Library API"}
 
-@app.post("/authors/", response_model=schemas.AuthorPublic)
+@app.post("/api/authors/", response_model=schemas.AuthorPublic)
 def create_author(author: schemas.AuthorCreate, db: Session = Depends(get_db)):
     return crud.create_author(db=db, author=author)
 
-@app.get("/authors/", response_model=List[schemas.AuthorPublic])
+@app.get("/api/authors/", response_model=List[schemas.AuthorPublic])
 def read_authors(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     authors = crud.list_authors(db, skip=skip, limit=limit)
     return authors
 
-@app.get("/authors/{author_id}", response_model=schemas.AuthorPublic)
+@app.get("/api/authors/{author_id}", response_model=schemas.AuthorPublic)
 def read_author(author_id: int, db: Session = Depends(get_db)):
     db_author = crud.get_author_by_id(db, author_id=author_id)
     if db_author is None:
@@ -38,27 +38,27 @@ def read_author(author_id: int, db: Session = Depends(get_db)):
     return db_author
 
 
-@app.post("/books/", response_model=schemas.BookPublic)
+@app.post("/api/books/", response_model=schemas.BookPublic)
 def create_book(book: schemas.BookCreate, db: Session = Depends(get_db)):
     return crud.create_book(db=db, book=book)
 
-@app.get("/books/", response_model=List[schemas.BookPublic])
+@app.get("/api/books/", response_model=List[schemas.BookPublic])
 def read_books(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     books = crud.list_books(db, skip=skip, limit=limit)
     return books
 
 
-@app.post("/readers/", response_model=schemas.ReaderPublic)
+@app.post("/api/readers/", response_model=schemas.ReaderPublic)
 def create_reader(reader: schemas.ReaderCreate, db: Session = Depends(get_db)):
     return crud.create_reader(db=db, reader=reader)
 
-@app.get("/readers/", response_model=List[schemas.ReaderPublic])
+@app.get("/api/readers/", response_model=List[schemas.ReaderPublic])
 def read_readers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     readers = crud.list_readers(db, skip=skip, limit=limit)
     return readers
 
 
-@app.get("/books/popular", response_model=List[schemas.BookPublic])
+@app.get("/api/books/popular", response_model=List[schemas.BookPublic])
 def get_popular_books(db: Session = Depends(get_db)):
     popular_books = (
         db.query(models.Book)
@@ -80,13 +80,14 @@ def _get_user_top_authors(user: models.Reader,limit: int = 3) -> List[models.Aut
     return top_authors
 
 
-@app.get("/dashboard/stats")
+@app.get("/api/dashboard/stats")
 def get_reader_dashboard(db: Session = Depends(get_db)):
 
     SIGNED_IN_READER_ID = 1
 
     most_popular_author_query = (
         db.query(models.Author, func.count(models.book_loans_table.c.reader_id).label("read_count"))
+        .select_from(models.Author) 
         .join(models.Book)
         .join(models.book_loans_table)
         .group_by(models.Author)
@@ -106,12 +107,12 @@ def get_reader_dashboard(db: Session = Depends(get_db)):
     favorite_authors = _get_user_top_authors(active_reader, limit=3)
 
     return {
-        "library_wide_stats": {
-            "most_popular_author": schemas.AuthorPublic.model_validate(most_popular_author) if most_popular_author else None,
-        },
-        "personal_stats": {
-            "user_profile": schemas.ReaderPublic.model_validate(active_reader),
-            "total_books_read": total_books_read,
-            "favorite_authors": [schemas.AuthorPublic.model_validate(author) for author in favorite_authors],
+            "library_wide_stats": {
+                "most_popular_author": schemas.AuthorPublic.model_validate(most_popular_author) if most_popular_author else None,
+            },
+            "personal_stats": {
+                "user_profile": schemas.ReaderPublic.model_validate(active_reader),
+                "total_books_read": total_books_read,
+                "favorite_authors": [schemas.AuthorPublic.model_validate(author) for author in favorite_authors],
+            }
         }
-    }

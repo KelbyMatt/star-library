@@ -7,7 +7,7 @@ function Dashboard({ stats }) {
   return (
     <section className={styles.dashboardContainer}>
       <h2 className={styles.welcomeHeader}>
-        Welcome, {personal_stats.user_profile.name}!
+        Welcome, {personal_stats.user_profile?.name || '...'}!
       </h2>
       
       <div className={styles.statsGrid}>
@@ -17,7 +17,7 @@ function Dashboard({ stats }) {
         />
         <StatCard 
           title="Top Author" 
-          value={library_wide_stats.most_popular_author.name}
+          value={library_wide_stats.most_popular_author?.name || '...'}
           subtext="(Star Library's No.1)"
         />
       </div>
@@ -25,9 +25,10 @@ function Dashboard({ stats }) {
       <div className={styles.favoritesSection}>
         <h3 className={styles.favoritesTitle}>Your Favorite Authors</h3>
         <ul className={styles.favoritesList}>
-          {personal_stats.favorite_authors.map((author, index) => (
+          {personal_stats.favorite_authors?.map((author, index) => (
             <li key={author.id} className={styles.favoriteItem}>
-              {index + 1}. {author.name}
+              <span className={styles.favoriteRank}>{index + 1}.</span>
+              <span className={styles.favoriteName}>{author.name}</span>
             </li>
           ))}
         </ul>
