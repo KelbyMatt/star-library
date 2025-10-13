@@ -61,11 +61,11 @@ First, set up and run the backend server.
 4.  **Initialize and seed the database:**
     This two-step process only needs to be run once to set up the database.
     
-    # Step 1: Create the database tables
+    ## Step 1: Create the database tables
 
     python manage.py
 
-    # Step 2: Populate the tables with data
+    ## Step 2: Populate the tables with data
 
     python seed.py
     
