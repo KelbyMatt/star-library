@@ -1,6 +1,13 @@
+"""
+Pydantic models (schemas) for the API.
+These define the shape of the data for requests and responses.
+"""
+
 from pydantic import BaseModel, ConfigDict
 from typing import List
 
+
+# --- Base Schemas ---
 
 class BookBase(BaseModel):
     title: str
@@ -12,6 +19,7 @@ class ReaderBase(BaseModel):
     name: str
 
 
+# --- Create Schemas ---
 
 class BookCreate(BookBase):
     author_id: int
@@ -23,7 +31,10 @@ class ReaderCreate(ReaderBase):
     pass
 
 
+# --- Public Schemas ---
 
+# The "In" schemas are the key to preventing an infinite loop from the
+# circular dependency between the Author and Book models.
 class BookInAuthor(BookBase):
     id: int
     model_config = ConfigDict(from_attributes=True)

@@ -1,3 +1,5 @@
+// Main Dashboard component that compiles all users stats.
+
 import styles from './Dashboard.module.css';
 import StatCard from './StatCard';
 

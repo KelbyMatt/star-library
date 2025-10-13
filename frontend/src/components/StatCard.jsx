@@ -1,3 +1,5 @@
+// A Reusable card for displaying singular data.
+
 import styles from './StatCard.module.css';
 
 function StatCard({ title, value, subtext }) {

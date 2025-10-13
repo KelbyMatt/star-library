@@ -1,3 +1,5 @@
+// Reusable: for displaying info of a book in a list
+
 import styles from './BookCard.module.css';
 
 function BookCard({ book, rank }) {

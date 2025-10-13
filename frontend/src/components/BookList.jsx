@@ -1,3 +1,5 @@
+//Displays the Most Popular Book Rankings.
+
 import styles from './BookList.module.css';
 import BookCard from './BookCard';
 

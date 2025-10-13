@@ -1,3 +1,7 @@
+// The root component. This is where we manage the main state
+// for the application and bring all the other components together.
+
+
 import { useState, useEffect } from 'react';
 import styles from './App.module.css';
 import Dashboard from './components/Dashboard';
@@ -17,10 +21,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
+    // This effect runs once when the app loads to fetch all data needed.
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetching both the dashboard stats and the popular books list at the same time.
         const [statsResponse, booksResponse] = await Promise.all([
           fetch('/api/dashboard/stats'),
           fetch('/api/books/popular')
@@ -45,7 +50,7 @@ function App() {
     fetchData();
   }, []);
 
-
+  // Conditional Rendering
   if (isLoading) {
     return <div className={styles.centeredMessage}>Loading Library...</div>;
   }
