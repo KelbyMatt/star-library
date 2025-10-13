@@ -84,6 +84,7 @@ def get_popular_books(db: Session = Depends(get_db)):
         .join(models.book_loans_table)
         .group_by(models.Book.id)
         .order_by(desc(func.count(models.book_loans_table.c.reader_id)))
+        .limit(10)
         .all()
     )
     return popular_books

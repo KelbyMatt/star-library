@@ -14,7 +14,7 @@ function Dashboard({ stats }) {
       
       <div className={styles.statsGrid}>
         <StatCard 
-          title="Books You've Read" 
+          title="Total Books You've Read" 
           value={personal_stats.total_books_read} 
         />
         <StatCard 

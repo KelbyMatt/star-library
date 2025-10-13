@@ -6,7 +6,7 @@ import BookCard from './BookCard';
 function BookList({ books }) {
   return (
     <section>
-      <h2 className={styles.listHeader}>Most Popular Books</h2>
+      <h2 className={styles.listHeader}>Top 10 Most Popular Books</h2>
       <ul className={styles.bookList}>
         {books?.map((book, index) => (
         
