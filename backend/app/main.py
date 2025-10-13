@@ -11,7 +11,6 @@ from sqlalchemy import  desc, func
 from typing import List, Optional
 from collections import Counter
 
-models.dbBase.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -26,7 +25,11 @@ def get_db():
 
 @app.get("/api")
 def main_library_root():
-    return {"message": "STAR Library API"}
+    return {
+            "api_name": "STAR Library API",
+            "version": "0.1-dev",
+            "status": "ok"
+            }
 
 
 # --- Basic CRUD Endpoints ---
