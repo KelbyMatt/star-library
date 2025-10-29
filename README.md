@@ -1,6 +1,4 @@
-# STAR Library - Full-Stack Assessment Project
-
-Firstly, thank you for this opportunity and for taking time to reveiw my submission. I am excited to show my abilities on an end-to-end application.
+# STAR Library - Full-Stack Project
 
 ## Project Overview
 
