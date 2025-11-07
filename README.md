@@ -8,7 +8,7 @@ The project is a simplified dashboard for an online library, designed to be clea
 - **Dynamic Dashboard:** Displays the librarys most popular author, a user's total books read, and their personal list of favourite authors.
 - **Ranked Book List:** Fetches and displays a list of the most popular books, sorted by the number of unique readers.
 - **RESTful API:** Backend API built with FastAPI that serves all the necessary data.
-- **Custom-Styled UI:** A responsive user interface built with React and styled with CSS Modules, based on a custom design influenced by Subtera's website.
+- **Custom-Styled UI:** A responsive user interface built with React and styled with CSS Modules, custom style influenced by La Lakers' Purple and Gold.
 
 ## Technology Stack
 
